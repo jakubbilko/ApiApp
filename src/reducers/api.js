@@ -1,14 +1,16 @@
-import { LOGIN_FAIL } from '../constants/ActionTypes';
+import { LOGIN_SUCCESS } from '../constants/ActionTypes';
 
-const initialState = {
+const INITIAL_STATE = {
   token: ''
 };
 
-
-export function loginFail(state = initialState, action) {
-  switch (action.type) {
-    case LOGIN_FAIL:
-      return 'errr';
+export default function(state = INITIAL_STATE, action) {
+  switch(action.type) {
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        token: action.token
+      };
     default:
       return state;
   }

@@ -1,7 +1,12 @@
 import {createStore, compose, applyMiddleware} from 'redux';
 import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
+import { routerMiddleware } from 'react-router-redux'
 import thunk from 'redux-thunk';
+import promiseMiddleware from 'redux-promise';
+import { browserHistory } from 'react-router';
 import rootReducer from '../reducers';
+
+const router = routerMiddleware(browserHistory);
 
 function configureStoreProd(initialState) {
   const middlewares = [
@@ -9,6 +14,8 @@ function configureStoreProd(initialState) {
 
     // thunk middleware can also accept an extra argument to be passed to each thunk action
     // https://github.com/gaearon/redux-thunk#injecting-a-custom-argument
+    promiseMiddleware,
+    router,
     thunk,
   ];
 
@@ -27,6 +34,8 @@ function configureStoreDev(initialState) {
 
     // thunk middleware can also accept an extra argument to be passed to each thunk action
     // https://github.com/gaearon/redux-thunk#injecting-a-custom-argument
+    promiseMiddleware,
+    router,
     thunk,
   ];
 

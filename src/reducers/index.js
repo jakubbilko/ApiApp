@@ -1,7 +1,8 @@
-// Set up your root reducer here...
+import { routerReducer } from 'react-router-redux';
 import { combineReducers } from 'redux';
 import * as reducers from './api';
 
  export default combineReducers({
-   ...reducers
+   ...reducers,
+   routing: routerReducer
  });
