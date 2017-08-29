@@ -8,6 +8,6 @@ import Products from './containers/Products';
 export default (
   <Route path="/" component={App}>
     <IndexRoute component={Login} />
-    <Route path="/foo" component={Products} />
+    <Route path="/products" component={Products} />
   </Route>
 );

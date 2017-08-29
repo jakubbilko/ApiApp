@@ -1,7 +1,8 @@
-import { LOGIN_SUCCESS } from '../constants/ActionTypes';
+import { LOGIN_SUCCESS, PRODUCTS_FETCHED } from '../constants/ActionTypes';
 
 const INITIAL_STATE = {
-  token: ''
+  token: '',
+  products: []
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -10,6 +11,11 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         token: action.token
+      };
+    case PRODUCTS_FETCHED:
+      return {
+        ...state,
+        products: action.products
       };
     default:
       return state;
