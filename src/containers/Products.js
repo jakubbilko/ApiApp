@@ -9,7 +9,8 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import { fetchProducts } from '../actions';
+import { browserHistory } from 'react-router';
+import { fetchProducts, loginFailed } from '../actions';
 
 const mapStateToProps = (state) => {
   return {
@@ -24,7 +25,12 @@ class Products extends React.Component {
   }
 
   componentWillMount() {
-    this.props.fetchProducts();
+    if(!this.props.token) {
+      this.props.loginFailed('Please login first');
+      browserHistory.push('/');
+    } else {
+      this.props.fetchProducts(this.props.token);
+    }
   }
 
   renderItems() {
@@ -61,7 +67,8 @@ class Products extends React.Component {
 
 Products.propTypes = {
   products: PropTypes.array,
-  fetchProducts: PropTypes.func
+  fetchProducts: PropTypes.func,
+  token: PropTypes.string
 };
 
-export default connect(mapStateToProps, { fetchProducts })(Products);
+export default connect(mapStateToProps, { fetchProducts, loginFailed })(Products);

@@ -1,6 +1,8 @@
-// import axios from 'axios';
 import { push } from 'react-router-redux';
-import { LOGIN_SUCCESS, PRODUCTS_FETCHED } from '../constants/ActionTypes';
+import axios from 'axios';
+import { LOGIN_SUCCESS, PRODUCTS_FETCHED, LOGIN_FAIL } from '../constants/ActionTypes';
+
+const BASE_URL = 'http://recruits.siennsoft.com/api';
 
 export function loginSuccess(token) {
   return {
@@ -9,32 +11,48 @@ export function loginSuccess(token) {
   };
 }
 
-export function productsFetched() {
+export function loginFailed(error) {
+  return {
+    type: LOGIN_FAIL,
+    error
+  };
+}
+
+export function productsFetched(products) {
   return {
     type: PRODUCTS_FETCHED,
-    products: [{
-        productID :1,
-        name: "Mleko Mlekpol",
-        price: 2.5,
-        description: "Dobre mleko UHT"
-      }]
+    products
   };
 }
 
 export function login(credentials) {
-  // const url = `${BASE_URL}/jwt`;
-  //
-  // const request = axios
-  console.log(credentials);
+  const url = `${BASE_URL}/jwt`;
+
+  const { username, password } = credentials;
+  const data = new FormData();
+  data.append('username', username);
+  data.append('password', password);
 
   return (dispatch) => {
-    dispatch(loginSuccess('123'));
-    dispatch(push('/products'));
+    axios.post(url, data)
+      .then(({data}) => {
+        dispatch(loginSuccess(data.access_token));
+        dispatch(push('/products'));
+      })
+      .catch((error) => {
+        dispatch(loginFailed(error.response.data));
+      });
   };
 }
 
-export function fetchProducts() {
+export function fetchProducts(token) {
+  const url = `${BASE_URL}/products`;
+
   return (dispatch) => {
-    dispatch(productsFetched());
+    axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((res) => dispatch(productsFetched(res.data)));
   };
 }

@@ -1,8 +1,9 @@
-import { LOGIN_SUCCESS, PRODUCTS_FETCHED } from '../constants/ActionTypes';
+import { LOGIN_SUCCESS, PRODUCTS_FETCHED, LOGIN_FAIL } from '../constants/ActionTypes';
 
 const INITIAL_STATE = {
   token: '',
-  products: []
+  products: [],
+  loginError: ''
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -16,6 +17,11 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         products: action.products
+      };
+    case LOGIN_FAIL:
+      return {
+        ...state,
+        loginError: action.error
       };
     default:
       return state;

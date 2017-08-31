@@ -3,16 +3,22 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import { login } from '../actions';
+import { login, loginFailed } from '../actions';
+
+const mapStateToProps = (state) => {
+  return {
+    error: state.default.loginError
+  };
+};
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      login: '',
+      username: '',
       password: '',
-      loginValid: null,
+      usernameValid: null,
       passwordValid: null,
       formValid: false };
 
@@ -21,8 +27,9 @@ class Login extends React.Component {
   }
 
   onLoginClick() {
-    const { login, password } = this.state;
-    this.props.login({ login, password });
+    this.props.loginFailed('');
+    const { username, password } = this.state;
+    this.props.login({ username, password });
   }
 
   inputChange (e) {
@@ -44,7 +51,7 @@ class Login extends React.Component {
   }
 
   validateForm() {
-    this.setState({ formValid: this.state.loginValid && this.state.passwordValid });
+    this.setState({ formValid: this.state.usernameValid && this.state.passwordValid });
   }
 
   render() {
@@ -52,10 +59,10 @@ class Login extends React.Component {
       <div className="login-form">
         <h1 className="login-form__title">Login</h1>
         <TextField
-          name="login"
+          name="username"
           fullWidth={true}
           floatingLabelText="Username"
-          value={this.state.login}
+          value={this.state.username}
           onChange={this.inputChange}
         />
         <TextField
@@ -66,6 +73,7 @@ class Login extends React.Component {
           value={this.state.password}
           onChange={this.inputChange}
         />
+        <p className="login-form__error">{this.props.error}</p>
         <RaisedButton onClick={this.onLoginClick} className="login-form__button" label="Login" disabled={!this.state.formValid} primary={true} fullWidth={true} />
       </div>
     );
@@ -73,7 +81,9 @@ class Login extends React.Component {
 }
 
 Login.propTypes = {
-  login: PropTypes.func
+  login: PropTypes.func,
+  loginFailed: PropTypes.func,
+  error: PropTypes.string
 };
 
-export default connect(null, { login })(Login);
+export default connect(mapStateToProps, { login, loginFailed })(Login);

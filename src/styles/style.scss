@@ -15,4 +15,9 @@ body {
   &__button {
     margin-top: 20px;
   }
+
+  &__error {
+    text-align: center;
+    color: red;
+  }
 }
